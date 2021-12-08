@@ -25,14 +25,29 @@ import lombok.Setter;
 @Table(name = "customer")
 public class Customer implements Serializable {
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 	@NotNull(message = "Name is required")
 	private String name;
+	public Customer(int id, @NotNull(message = "Name is required") String name,
+			@NotNull(message = "Age is required") int age) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.age = age;
+	}
 	@NotNull(message = "Dob is required")
 	private Date dob;
 	@NotNull(message = "Age is required")
 	private int age;
+	public Customer(int id, @NotNull(message = "Name is required") String name,
+			@NotNull(message = "Dob is required") Date dob, @NotNull(message = "Age is required") int age) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.dob = dob;
+		this.age = age;
+	}
 	public Customer(int id, @NotNull(message = "Name is required") String name,
 			@NotNull(message = "Dob is required") Date dob,
 			@NotNull(message = "Creditlimit is required") Integer age) {

@@ -21,6 +21,15 @@ public class CustomerService implements ServiceInterface {
 	
 		this.customerRepository = customerRepository;
 	}
+	
+	
+
+	public Customer findByName(String name) {
+		return customerRepository.findByName(name);
+	}
+
+
+
 	@Override
 	public Optional<Customer> updateCustomer(Integer id, Customer customer){
 		return customerRepository.findById(id).map((d) -> {
@@ -30,7 +39,10 @@ public class CustomerService implements ServiceInterface {
 			return customerRepository.save(d);
 		});
 	}
-	
+	@Override
+	public List<Customer> listCustomers(){
+		return customerRepository.findAll();
+	}
 	@Override
 	public <S extends Customer> S save(S entity) {
 		return customerRepository.save(entity);

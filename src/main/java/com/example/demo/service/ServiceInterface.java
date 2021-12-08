@@ -66,4 +66,6 @@ public interface ServiceInterface {
 
 	Optional<Customer> updateCustomer(Integer id, Customer customer);
 
+	List<Customer> listCustomers();
+
 }
