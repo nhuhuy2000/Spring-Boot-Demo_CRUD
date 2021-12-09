@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import javax.validation.Valid;
 
+import org.hibernate.engine.query.spi.sql.NativeSQLQueryCollectionReturn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -36,20 +37,27 @@ public class CustomerController {
 		}
 		@RequestMapping(value = "/customers/add", method=RequestMethod.POST)
 		public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
-			return new ResponseEntity<>(customerService.save(customer), HttpStatus.OK);
+			return new ResponseEntity<>(customerService.save(customer), HttpStatus.CREATED);
 		}
 		@RequestMapping(value = "/customers/view/{id}", method=RequestMethod.GET)
-		public ResponseEntity<Customer> viewCustomer(@PathVariable String id) {
-			Optional<Customer> getCustomer = customerService.findById(Integer.parseInt(id));
-			return getCustomer.map(customer -> new ResponseEntity<>(customer, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+		public ResponseEntity<Customer> viewCustomer(@PathVariable int id) {
+			Optional<Customer> getCustomer = customerService.findById(id);
+			if(getCustomer.isPresent()) {
+				return new ResponseEntity<>(getCustomer.get(), HttpStatus.OK);
+			}
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		@RequestMapping(value = "/customers/update/{id}", method=RequestMethod.PUT)
-		public Optional<Customer> updateCustomer(@PathVariable("id") String id ,  @Valid @RequestBody Customer customer) {
-			return customerService.updateCustomer(Integer.parseInt(id), customer);
+		public ResponseEntity<Optional<Customer>> updateCustomer(@PathVariable("id") String id ,  @Valid @RequestBody Customer customer) {
+			return new ResponseEntity<>(customerService.updateCustomer(Integer.parseInt(id), customer) , HttpStatus.CREATED);
 		}
 		@RequestMapping(value = "/customers/delete/{id}", method=RequestMethod.DELETE)
 		public ResponseEntity<Customer> deleteCustomer(Customer customer) {
 			customerService.delete(customer);
 			return ResponseEntity.noContent().build();
 		}
+		@RequestMapping(value = "customers/saveall", method=RequestMethod.POST)
+		public ResponseEntity<Iterable<Customer>> postListCustomer(@RequestBody List<Customer> list){
+			return new ResponseEntity<>(customerService.saveAll(list), HttpStatus.OK);
+}
 }
