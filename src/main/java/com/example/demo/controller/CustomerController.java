@@ -33,7 +33,8 @@ public class CustomerController {
 		
 		@RequestMapping(value = "/customers", method=RequestMethod.GET)
 		public ResponseEntity<Iterable<Customer>> getCustomer() {
-			return new ResponseEntity<>(customerService.listCustomers(), HttpStatus.OK);
+			List<Customer> list = customerService.listCustomers();
+			return new ResponseEntity<>(list, HttpStatus.OK);
 		}
 		@RequestMapping(value = "/customers/add", method=RequestMethod.POST)
 		public ResponseEntity<Customer> addCustomer(@Valid @RequestBody Customer customer) {
